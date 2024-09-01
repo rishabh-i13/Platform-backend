@@ -67,15 +67,20 @@ app.post('/login',async (req,res)=>{
 })
 
 //profile Information
-app.get('/profile',(req,res)=>{
-  const {token}=req.cookies;
-  res.json(req.cookies);
-  jwt.verify(token,secret,{},(err,info)=>{
-    if(err) throw err;
+app.get('/profile', (req, res) => {
+  const { token } = req.cookies;
+  if (!token) {
+    return res.status(401).json({ error: 'No token provided' });
+  }
+
+  jwt.verify(token, secret, {}, (err, info) => {
+    if (err) {
+      return res.status(401).json({ error: 'Invalid token' });
+    }
     res.json(info);
-    console.log(info);
-  })
-})
+  });
+});
+
 
 app.listen(4000, () => {
   console.log('Server is running on port 4000');
