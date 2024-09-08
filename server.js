@@ -15,7 +15,7 @@ dotenv.config();
 const Mongo_URL = process.env.MONGODB_URL;
 
 const salt = bcrypt.genSaltSync(10); //Salt creation
-const secret='dfs68d74sc1sdce';
+const secret=process.env.JWT_SECRET;
 
 app.use(cors({credentials:true,origin:'http://localhost:5173'}));
 app.use(express.json());
@@ -80,6 +80,11 @@ app.get('/profile', (req, res) => {
     res.json(info);
   });
 });
+
+//for logout
+app.post('/logout',(Req,res)=>{
+  res.cookie('taken','').json('ok');
+})
 
 
 app.listen(4000, () => {
